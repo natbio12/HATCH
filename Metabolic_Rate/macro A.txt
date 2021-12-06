@@ -1,0 +1,43 @@
+[macro 1]
+ ' Add description and code here
+active channel O2_1
+create channel
+assign title 9 = BLO2
+assign title last_channel = BLO2
+active channel BLO2
+make_temp_data_copy all_samples
+correction drift all_samples maximum pivot left_right  copy_only left_percent 5 right_percent 5 subset_percent 10
+overwrite_data_with_copy all_samples
+create channel
+assign title 10 = deltaO2
+assign title last_channel = deltaO2
+active channel deltaO2
+make_temp_data_copy all_samples
+correction drift all_samples maximum pivot left_right  copy_only left_percent 5 right_percent 5 subset_percent 10
+transform linear all_samples slope -1 intercept 0
+active channel CO2
+create channel
+assign title 11 = BLCO2
+assign title last_channel = BLCO2
+active channel BLCO2
+make_temp_data_copy all_samples
+correction drift all_samples minimum pivot left_right  copy_only left_percent 5 right_percent 5 subset_percent 10
+overwrite_data_with_copy all_samples
+create channel
+assign title 12 = FECO2
+assign title last_channel = FECO2
+active channel FECO2
+transform linear all_samples slope 0.000001 intercept 0
+active channel deltaO2
+create channel
+assign title 13 = VO2
+assign title last_channel = VO2
+active channel VO2
+transform general all_samples expression VO2=deltaO2*100/(1-0.2095)
+active channel FECO2
+create channel
+assign title 14 = VCO2
+assign title last_channel = VCO2
+transform general all_samples expression VCO2=FECO2*100
+[/macro 1]
+
